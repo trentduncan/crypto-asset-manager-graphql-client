@@ -1,35 +1,35 @@
 import React from 'react';
 
-import Coin from './coin';
+// import Coin from './coin';
+import AddCoin from './mutation';
 
-import { graphql, ApolloConsumer } from 'react-apollo'
+import { ApolloConsumer } from 'react-apollo'
 import gql from 'graphql-tag'
 
 export default class SearchCoins extends React.Component {
   constructor(props) {
       super(props);
       this.state= {
-          searchTerm: '',
           searchResults: null
       }
   }
-  render () {
-    //  if (this.props.topQuery && this.props.topQuery.loading) {
-    //     return <div>Loading</div>
-    //   }
+//   async onClick () {
+//     const { data } = await client.query({
+//         query: SEARCH_QUERY,
+//         variables: { symbol: event.target.search.value }
+//       });
+//   }
+  generateSearchResults(props) {
+    return this.state.searchResults.map((coin, index) => {
+    return (
+        <AddCoin key={index} name={coin.name} symbol={coin.symbol} id={coin.id} refetchUserCoins={()=>props.refetchUserCoins()}/>
+    );
     
-    //   if (this.props.topQuery && this.props.topQuery.error) {
-    //     return <div>Error</div>
-    //   }
-    //   const coins = this.props.topQuery.top10.map((coin, index) => <Coin key={index} name={coin.name} symbol={coin.symbol} change24h={coin.change24h}/>);
-    //   return (
-    //     <div>
-    //       <h1>Top 10</h1>
-    //       <ul>
-    //         {coins}
-    //       </ul>
-    //     </div>
-    //   );
+    });
+
+  }
+
+  render () {
     return (
         <ApolloConsumer>
         {client => (
@@ -47,7 +47,7 @@ export default class SearchCoins extends React.Component {
                 <input type="text" name="search"/>
             </form>
             <ul>
-              {this.state.searchResults ? this.state.searchResults.map((coin, index) => <Coin key={index} name={coin.name} symbol={coin.symbol}/>) : ''}
+              {this.state.searchResults ?  this.generateSearchResults(this.props) : ''}
             </ul>
           </div>
         )}
@@ -66,4 +66,3 @@ const SEARCH_QUERY = gql`
 }
 `
 
-// export default graphql(SEARCH_QUERY, { name: 'searchQuery' })(SearchCoins);

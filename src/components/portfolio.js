@@ -2,12 +2,15 @@ import React from 'react';
 
 import Coin from './coin';
 
+import SearchCoins from './search-coins';
+
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 class Portfolio extends React.Component {
   
   render () {
+     console.log(this.props.userCoinsQuery)
      if (this.props.userCoinsQuery && this.props.userCoinsQuery.loading) {
         return <div>Loading</div>
       }
@@ -27,6 +30,7 @@ class Portfolio extends React.Component {
           <ul>
             {coins}
           </ul>
+          <SearchCoins refetchUserCoins={() => this.props.userCoinsQuery.refetch()}/>
         </div>
       );
   }
